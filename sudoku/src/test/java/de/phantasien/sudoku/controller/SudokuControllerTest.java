@@ -38,21 +38,12 @@ public class SudokuControllerTest {
     public SudokuControllerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
-        GameInitializer gameInitializer = new GameInitializer();
         GamesQueue gamesQueue = Mockito.mock(GamesQueue.class);
         Mockito.when(gamesQueue.getGameById("111")).thenReturn(new Game(GameLevel.medium, null));
 
-        mvc = MockMvcBuilders.standaloneSetup(new SudokuController(gameInitializer, gamesQueue)).build();
+        mvc = MockMvcBuilders.standaloneSetup(new SudokuController(gamesQueue)).build();
     }
 
     @After

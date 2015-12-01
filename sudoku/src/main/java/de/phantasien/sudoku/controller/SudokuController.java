@@ -31,12 +31,11 @@ public class SudokuController {
 
     private static final Logger LOGGER = Logger.getLogger(SudokuController.class);
 
-    private final GameInitializer gameInitializer;
+    private final GameInitializer gameInitializer = new GameInitializer();
     private final GamesQueue gamesQueue;
 
     @Autowired
-    public SudokuController(GameInitializer gameInitializer, GamesQueue gamesQueue) {
-        this.gameInitializer = gameInitializer;
+    public SudokuController(final GamesQueue gamesQueue) {
         this.gamesQueue = gamesQueue;
     }
 

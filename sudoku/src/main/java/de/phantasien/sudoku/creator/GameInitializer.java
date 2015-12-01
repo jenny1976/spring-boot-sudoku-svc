@@ -32,7 +32,7 @@ public class GameInitializer {
 
                 fields.put(i+","+y, new Cell(i, y, numberList.get(y), true));
 
-            } if(i==2 || i==5){
+            } if (i==2 || i==5) {
                 Collections.rotate(numberList, -4);
             } else {
                 Collections.rotate(numberList, -3);

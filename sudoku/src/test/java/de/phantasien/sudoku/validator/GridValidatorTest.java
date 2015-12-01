@@ -1,6 +1,8 @@
 package de.phantasien.sudoku.validator;
 
+import de.phantasien.sudoku.creator.GameInitializer;
 import de.phantasien.sudoku.model.Cell;
+import de.phantasien.sudoku.model.GameLevel;
 import de.phantasien.sudoku.model.Grid;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,14 +71,14 @@ public class GridValidatorTest {
     public void tearDown() {
     }
 
-    @Test @Ignore
+    @Test
     public void testValidateGrid() {
         System.out.println("validateGrid");
-        Grid grid = null;
+        Grid grid = new GameInitializer().createGame(GameLevel.easy).getBoard();
         GridValidator instance = new GridValidator();
-        boolean expResult = false;
         boolean result = instance.validateGrid(grid);
 
+        Assert.assertEquals(true, result);
     }
 
     @Test
@@ -128,25 +130,25 @@ public class GridValidatorTest {
 
         GridValidator instance = new GridValidator();
 
-        Cell[] row = new Cell[9];
-        row[0] = new Cell(1, 1, 3, true);
-        row[1] = new Cell(1, 2, 7, true);
-        row[2] = new Cell(1, 2, 1, true);
-        row[3] = new Cell(1, 2, 2, true);
-        row[4] = new Cell(1, 2, 4, true);
-        row[5] = new Cell(1, 2, 5, true);
-        row[6] = new Cell(1, 2, 6, true);
-        row[7] = new Cell(1, 2, 8, true);
+        Map<String, Cell> row = new HashMap<>();
+        row.put("0,0", new Cell(0, 1, 3, true));
+        row.put("0,1", new Cell(0, 1, 1, true));
+        row.put("0,2", new Cell(0, 1, 2, true));
+        row.put("0,3", new Cell(0, 1, 4, true));
+        row.put("0,4", new Cell(0, 1, 7, true));
+        row.put("0,5", new Cell(0, 1, 9, true));
+        row.put("0,6", new Cell(0, 1, 5, true));
+        row.put("0,7", new Cell(0, 1, 6, true));
+        row.put("0,8", new Cell(0, 1, 6, true));
 
-        row[8] = new Cell(1, 2, 8, true);
         boolean result = instance.validateNine(row);
         Assert.assertEquals(false, result);
 
-        row[8] = new Cell(1, 2, 19, true);
+        row.replace("0,8", new Cell(0, 1, 12, true));
         result = instance.validateNine(row);
         Assert.assertEquals(false, result);
 
-        row[8] = new Cell(1, 2, 9, true);
+        row.replace("0,8", new Cell(0, 1, 8, true));
         result = instance.validateNine(row);
         Assert.assertEquals(true, result);
 

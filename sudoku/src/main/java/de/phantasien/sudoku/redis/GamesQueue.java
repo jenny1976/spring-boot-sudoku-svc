@@ -1,6 +1,7 @@
 package de.phantasien.sudoku.redis;
 
 import de.phantasien.sudoku.model.Game;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -37,7 +38,7 @@ public class GamesQueue {
     public String addGame(final Game game) {
         String gid = String.valueOf(gameIdCounter.incrementAndGet());
 
-        valueOperations.set(gid, game);
+        valueOperations.set(gid, game, 30, TimeUnit.DAYS);
 
         games.addFirst(game);
         return gid;
@@ -46,7 +47,11 @@ public class GamesQueue {
     public Game getGameById(final String gid) {
 
         return valueOperations.get(gid);
-//        return Collections.singletonList(convertPost(pid, post(pid)));
+    }
+
+    public Game updateGame(final Game game, final String gid) {
+
+        return valueOperations.getAndSet(gid, game);
     }
 
 }

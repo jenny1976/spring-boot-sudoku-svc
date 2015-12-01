@@ -4,10 +4,13 @@ import de.phantasien.sudoku.creator.GameInitializer;
 import de.phantasien.sudoku.model.GameLevel;
 import de.phantasien.sudoku.model.Game;
 import de.phantasien.sudoku.model.Move;
+import de.phantasien.sudoku.redis.GamesQueue;
+import javax.inject.Inject;
 
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,19 +31,31 @@ public class SudokuController {
 
     private static final Logger LOGGER = Logger.getLogger(SudokuController.class);
 
-    private final GameInitializer gameInitializer = new GameInitializer();
+    private final GameInitializer gameInitializer;
+    private final GamesQueue gamesQueue;
+
+    @Autowired
+    public SudokuController(GameInitializer gameInitializer, GamesQueue gamesQueue) {
+        this.gameInitializer = gameInitializer;
+        this.gamesQueue = gamesQueue;
+    }
 
     @RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
-    public @ResponseBody Game loadGame(final @PathVariable Long gameId) {
+    public @ResponseBody Game loadGame(final @PathVariable String gameId) {
 
-        return gameInitializer.createGame(GameLevel.easy);
+        final Game currentGame = gamesQueue.getGameById(gameId);
+        currentGame.setId(gameId);
+        return currentGame;
     }
 
 
     @RequestMapping(value = "/create/{level}", method = RequestMethod.PUT)
     public @ResponseBody Game createGame(final @PathVariable GameLevel level) {
 
-        return gameInitializer.createGame(level);
+        final Game newGame = gameInitializer.createGame(level);
+        final String gameId = gamesQueue.addGame(newGame);
+        newGame.setId(gameId);
+        return newGame;
     }
 
 

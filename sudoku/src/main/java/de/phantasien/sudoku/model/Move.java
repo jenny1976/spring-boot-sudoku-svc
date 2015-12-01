@@ -10,7 +10,8 @@ public class Move implements Serializable {
 
     private static final long serialVersionUID = 8241087104067697332L;
 
-    private Cell square;
+    private int rowNum;
+    private int colNum;
 
     private int input;
 
@@ -19,8 +20,9 @@ public class Move implements Serializable {
     public Move() {
     }
 
-    public Move(Cell square, int input, MoveResult moveResult) {
-        this.square = square;
+    public Move(int rowNum, int colNum, int input, MoveResult moveResult) {
+        this.rowNum = rowNum;
+        this.colNum = colNum;
         this.input = input;
         this.moveResult = moveResult;
     }
@@ -41,25 +43,34 @@ public class Move implements Serializable {
         this.moveResult = moveResult;
     }
 
-    public Cell getSquare() {
-        return square;
+    public int getRowNum() {
+        return rowNum;
     }
 
-    public void setSquare(Cell square) {
-        this.square = square;
+    public void setRowNum(int rowNum) {
+        this.rowNum = rowNum;
+    }
+
+    public int getColNum() {
+        return colNum;
+    }
+
+    public void setColNum(int colNum) {
+        this.colNum = colNum;
     }
 
     @Override
     public String toString() {
-        return "Move{" + "square=" + square + ", input=" + input + ", moveResult=" + moveResult + '}';
+        return "Move{" + "rowNum=" + rowNum + ", colNum=" + colNum + ", input=" + input + ", moveResult=" + moveResult + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.square);
-        hash = 47 * hash + this.input;
-        hash = 47 * hash + Objects.hashCode(this.moveResult);
+        hash = 37 * hash + this.rowNum;
+        hash = 37 * hash + this.colNum;
+        hash = 37 * hash + this.input;
+        hash = 37 * hash + Objects.hashCode(this.moveResult);
         return hash;
     }
 
@@ -72,7 +83,10 @@ public class Move implements Serializable {
             return false;
         }
         final Move other = (Move) obj;
-        if (!Objects.equals(this.square, other.square)) {
+        if (this.rowNum != other.rowNum) {
+            return false;
+        }
+        if (this.colNum != other.colNum) {
             return false;
         }
         if (this.input != other.input) {

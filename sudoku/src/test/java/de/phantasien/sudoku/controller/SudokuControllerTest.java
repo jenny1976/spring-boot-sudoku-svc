@@ -2,8 +2,11 @@ package de.phantasien.sudoku.controller;
 
 import de.phantasien.sudoku.model.Move;
 import de.phantasien.sudoku.model.MoveResult;
-import de.phantasien.sudoku.model.Cell;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.phantasien.sudoku.creator.GameInitializer;
+import de.phantasien.sudoku.model.Game;
+import de.phantasien.sudoku.model.GameLevel;
+import de.phantasien.sudoku.redis.GamesQueue;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -11,6 +14,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -44,7 +48,11 @@ public class SudokuControllerTest {
 
     @Before
     public void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(new SudokuController()).build();
+        GameInitializer gameInitializer = new GameInitializer();
+        GamesQueue gamesQueue = Mockito.mock(GamesQueue.class);
+        Mockito.when(gamesQueue.getGameById("111")).thenReturn(new Game(GameLevel.medium, null));
+
+        mvc = MockMvcBuilders.standaloneSetup(new SudokuController(gameInitializer, gamesQueue)).build();
     }
 
     @After
@@ -75,7 +83,7 @@ public class SudokuControllerTest {
 
     @Test
     public void testValidateMove() throws Exception {
-        Move move = new Move(new Cell(1, 1, 8, false), 9, MoveResult.invalid);
+        Move move = new Move(1, 1, 9, MoveResult.invalid);
 
         MvcResult andReturn = mvc.perform(MockMvcRequestBuilders.post("/sudoku/validate/111").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

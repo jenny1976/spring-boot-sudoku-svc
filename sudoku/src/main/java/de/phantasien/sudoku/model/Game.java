@@ -10,6 +10,8 @@ public class Game implements Serializable {
 
     private static final long serialVersionUID = 183330891574822943L;
 
+    private String id;
+
     private GameState gameState = GameState.ongoing;
 
     private GameLevel gameLevel;
@@ -21,6 +23,14 @@ public class Game implements Serializable {
     public Game(GameLevel gameLevel, Grid board) {
         this.gameLevel = gameLevel;
         this.board = board;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public GameState getGameState() {

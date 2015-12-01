@@ -2,6 +2,9 @@ package de.phantasien.sudoku.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author jschulz, 14.11.2015
@@ -14,29 +17,29 @@ public class Grid implements Serializable {
 
     public static final int cols = 9;
 
-    private final Cell[][] fields;
+    private final Map<String, Cell> fields;
 
     public Grid() {
-        fields = new Cell[rows][cols];
+        fields = new HashMap<>(cols*rows);
     }
 
-    public Grid(Cell[][] fields) {
+    public Grid(Map<String, Cell> fields) {
         this.fields = fields;
     }
 
-    public Cell[][] getFields() {
+    public Map<String, Cell> getFields() {
         return fields;
     }
 
     @Override
     public String toString() {
-        return "Board{" + "rows=" + rows + ", cols=" + cols + ", fields=" + Arrays.deepToString(fields) + '}';
+        return "Grid{" + "fields=" + fields + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Arrays.deepHashCode(this.fields);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.fields);
         return hash;
     }
 
@@ -49,10 +52,11 @@ public class Grid implements Serializable {
             return false;
         }
         final Grid other = (Grid) obj;
-        if (!Arrays.deepEquals(this.fields, other.fields)) {
+        if (!Objects.equals(this.fields, other.fields)) {
             return false;
         }
         return true;
     }
+
 
 }

@@ -9,7 +9,9 @@ import de.phantasien.sudoku.model.Cell;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,12 +25,12 @@ public class GameInitializer {
     public Game createGame(final GameLevel level) {
         Collections.shuffle(numberList);
 
-        Cell[][] fields = new Cell[Grid.rows][Grid.cols];
+        Map<String, Cell> fields = new HashMap<>(Grid.cols*Grid.rows);
 
         for (int i = 0; i < Grid.rows; i++) {
             for (int y = 0; y < Grid.cols; y++) {
 
-                fields[i][y] = new Cell(i, y, numberList.get(y), true);
+                fields.put(i+","+y, new Cell(i, y, numberList.get(y), true));
 
             } if(i==2 || i==5){
                 Collections.rotate(numberList, -4);
@@ -37,9 +39,7 @@ public class GameInitializer {
             }
         }
 
-        Game newGame = new Game(level, new Grid(fields));
-
-        return newGame;
+        return new Game(level, new Grid(fields));
     }
 
 
@@ -53,7 +53,7 @@ public class GameInitializer {
 
     //----------- dummy content methods ----------------
 
-    
+
 
     public static Move createDummyM() {
         final Move move = new Move();

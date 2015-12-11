@@ -48,7 +48,7 @@ public class SudokuController {
     }
 
 
-    @RequestMapping(value = "/create/{level}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{level}", method = RequestMethod.PUT)
     public @ResponseBody Game createGame(final @PathVariable GameLevel level) {
 
         final Game newGame = gameInitializer.createGame(level);
@@ -58,7 +58,7 @@ public class SudokuController {
     }
 
 
-    @RequestMapping(value = "/validate/{gameId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{gameId}/move", method = RequestMethod.POST)
     public @ResponseBody Move validateMove(final @PathVariable Long gameId, @RequestBody @Valid Move move) {
 
         return gameInitializer.createDummyM();

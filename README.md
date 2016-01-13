@@ -1,4 +1,4 @@
-# Sudoku Webservice
+# Sudoku Webservice [![Build Status](https://travis-ci.org/jenny1976/sudoku-svc.svg?branch=master)](https://travis-ci.org/jenny1976/sudoku-svc)
 
 - Redis key-value store
 - spring-boot
